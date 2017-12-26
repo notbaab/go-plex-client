@@ -362,21 +362,21 @@ type TaggedData struct {
 
 // Media ...
 type Media struct {
-	Part            []Part `json:"Part"`
-	AspectRatio     string `json:"aspectRatio"`
-	AudioChannels   string `json:"audioChannels"`
-	AudioCodec      string `json:"audioCodec"`
-	Bitrate         string `json:"bitrate"`
-	Container       string `json:"container"`
-	Duration        string `json:"duration"`
-	Height          string `json:"height"`
-	ID              string `json:"id"`
-	Selected        bool   `json:"selected"`
-	VideoCodec      string `json:"videoCodec"`
-	VideoFrameRate  string `json:"videoFrameRate"`
-	VideoProfile    string `json:"videoProfile"`
-	VideoResolution string `json:"videoResolution"`
-	Width           string `json:"width"`
+	Part            []Part  `json:"Part"`
+	AspectRatio     float64 `json:"aspectRatio"`
+	AudioChannels   int8    `json:"audioChannels"`
+	AudioCodec      string  `json:"audioCodec"`
+	Bitrate         int64   `json:"bitrate"`
+	Container       string  `json:"container"`
+	Duration        int64   `json:"duration"`
+	Height          int64   `json:"height"`
+	ID              int64   `json:"id"`
+	Selected        bool    `json:"selected"`
+	VideoCodec      string  `json:"videoCodec"`
+	VideoFrameRate  string  `json:"videoFrameRate"`
+	VideoProfile    string  `json:"videoProfile"`
+	VideoResolution string  `json:"videoResolution"`
+	Width           int64   `json:"width"`
 }
 
 type SectionType string
@@ -1239,17 +1239,17 @@ type Part struct {
 	Stream                []Stream `json:"Stream"`
 	Container             string   `json:"container"`
 	Decision              string   `json:"decision"`
-	Duration              string   `json:"duration"`
+	Duration              int      `json:"duration"`
 	File                  string   `json:"file"`
 	HasThumbnail          string   `json:"hasThumbnail"`
-	ID                    string   `json:"id"`
+	ID                    int      `json:"id"`
 	Key                   string   `json:"key"`
 	Selected              bool     `json:"selected"`
-	Size                  string   `json:"size"`
+	Size                  int      `json:"size"`
 	VideoProfile          string   `json:"videoProfile"`
 	AudioProfile          string   `json:"audioProfile"`
 	Has64bitOffsets       bool     `json:"has64bitOffsets"`
-	OptimizedForStreaming string   `json:"optimizedForStreaming"`
+	OptimizedForStreaming bool     `json:"optimizedForStreaming"`
 }
 
 // Player ...
