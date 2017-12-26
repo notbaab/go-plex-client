@@ -379,6 +379,49 @@ type Media struct {
 	Width           string `json:"width"`
 }
 
+type SectionType string
+
+const (
+	SECTION_TYPES_MOVIE   SectionType = "movie"
+	SECTION_TYPES_TV_SHOW SectionType = "show"
+)
+
+type SectionMetadata struct {
+	Country               []TaggedData `json: "Country"`
+	Director              []TaggedData `json: "Director"`
+	Genre                 []TaggedData `json: "Genre"`
+	Role                  []TaggedData `json: "Role"`
+	Writer                []TaggedData `json: "Writer"`
+	Media                 []Media      `json: "Media"`
+	AddedAt               int          `json: "addedAt"`
+	Art                   string       `json: "art"`
+	AudienceRating        float64      `json: "audienceRating"`
+	AudienceRatingImage   string       `json: "audienceRatingImage"`
+	ChapterSource         string       `json: "chapterSource"`
+	ContentRating         string       `json: "contentRating"`
+	Duration              int          `json: "duration"`
+	Key                   string       `json: "key"`
+	OriginallyAvailableAt string       `json: "originallyAvailableAt"`
+	PrimaryExtraKey       string       `json: "primaryExtraKey"`
+	Rating                float64      `json: "rating"`
+	RatingImage           string       `json: "ratingImage"`
+	RatingKey             string       `json: "ratingKey"`
+	Studio                string       `json: "studio"`
+	Summary               string       `json: "summary"`
+	Tagline               string       `json: "tagline"`
+	Thumb                 string       `json: "thumb"`
+	Title                 string       `json: "title"`
+	Type                  SectionType  `json: "type"`
+	UpdatedAt             int          `json: "updatedAt"`
+	Year                  int          `json: "year"`
+}
+
+type Section struct {
+	MediaContainer struct {
+		Metadata []SectionMetadata `json: "Metadata"`
+	} `json: "MedaiContainer"`
+}
+
 // MetadataChildren returns metadata about a piece of media (tv show, movie, music, etc)
 type MetadataChildren struct {
 	MediaContainer struct {

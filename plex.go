@@ -682,6 +682,28 @@ func (p *Plex) GetMachineID() (string, error) {
 	return result.MediaContainer.MachineIdentifier, nil
 }
 
+// Get all items in a specific section
+func (p *Plex) GetSection(sectionId string) (Section, error) {
+	query := fmt.Sprintf("%s/library/sections/%s/all", p.URL, sectionId)
+	resp, err := p.get(query, defaultHeaders())
+
+	if err != nil {
+		fmt.Printf("%s", err)
+		return Section{}, err
+	}
+
+	defer resp.Body.Close()
+
+	var result Section
+
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		fmt.Println(err.Error())
+		return Section{}, err
+	}
+
+	return result, nil
+}
+
 // GetSections of your plex server. This is useful when inviting a user
 // as you can restrict the invited user to a library (i.e. Movie's, TV Shows)
 func (p *Plex) GetSections(machineID string) ([]ServerSections, error) {
