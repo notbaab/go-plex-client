@@ -32,6 +32,30 @@ func defaultHeaders() headers {
 	}
 }
 
+func (p *Plex) genericGetResponse(query string, requestHeaders headers) (Response, error) {
+	var results Response
+
+	resp, err := p.get(query, requestHeaders)
+
+	if err != nil {
+		return results, err
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return results, errors.New("server error: " + resp.Status)
+	}
+
+	defer resp.Body.Close()
+	// data, err := ioutil.ReadAll(resp.Body)
+	// fmt.Printf("\n**********************\n%s\n\n**********\n\n", data)
+
+	if err := json.NewDecoder(resp.Body).Decode(&results); err != nil {
+		return results, err
+	}
+
+	return results, nil
+}
+
 // New creates a new plex instance that is required to
 // to make requests to your Plex Media Server
 func New(baseURL, token string) (*Plex, error) {
@@ -143,66 +167,24 @@ func (p *Plex) Search(title string) (SearchResults, error) {
 }
 
 // GetMetadata can get some media info
-func (p *Plex) GetMetadata(key string) (MediaMetadata, error) {
+func (p *Plex) GetMetadata(key string) (Response, error) {
 	if key == "" {
-		return MediaMetadata{}, errors.New("ERROR: A key is required")
+		return Response{}, errors.New("ERROR: A key is required")
 	}
-
-	var results MediaMetadata
 
 	query := fmt.Sprintf("%s/library/metadata/%s", p.URL, key)
-
-	newHeaders := defaultHeaders()
-
-	resp, err := p.get(query, newHeaders)
-
-	if err != nil {
-		return results, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return results, errors.New("server error: " + resp.Status)
-	}
-
-	defer resp.Body.Close()
-
-	if err := json.NewDecoder(resp.Body).Decode(&results); err != nil {
-		return results, err
-	}
-
-	return results, nil
+	return p.genericGetResponse(query, defaultHeaders())
 }
 
-// GetMetadataChildren can get a show's season titles. My use-case would be getting the season titles after using Search()
-func (p *Plex) GetMetadataChildren(key string) (MetadataChildren, error) {
+// GetMetadataChildren can get a show's season titles. My use-case would be
+// getting the season titles after using Search()
+func (p *Plex) GetMetadataChildren(key string) (Response, error) {
 	if key == "" {
-		return MetadataChildren{}, errors.New("ERROR: A key is required")
+		return Response{}, errors.New("ERROR: A key is required")
 	}
 
 	query := fmt.Sprintf("%s/library/metadata/%s/children", p.URL, key)
-
-	newHeaders := defaultHeaders()
-
-	resp, err := p.get(query, newHeaders)
-
-	if err != nil {
-		return MetadataChildren{}, err
-	}
-
-	// Unauthorized
-	if resp.StatusCode == 401 {
-		return MetadataChildren{}, errors.New("You are not authorized to access that server")
-	}
-
-	defer resp.Body.Close()
-
-	var results MetadataChildren
-
-	if err := json.NewDecoder(resp.Body).Decode(&results); err != nil {
-		return MetadataChildren{}, err
-	}
-
-	return results, nil
+	return p.genericGetResponse(query, defaultHeaders())
 }
 
 // GetEpisodes returns episodes of a season of a show
@@ -683,22 +665,25 @@ func (p *Plex) GetMachineID() (string, error) {
 }
 
 // Get all items in a specific section
-func (p *Plex) GetSection(sectionId string) (Section, error) {
+func (p *Plex) GetSection(sectionId string) (Response, error) {
 	query := fmt.Sprintf("%s/library/sections/%s/all", p.URL, sectionId)
-	resp, err := p.get(query, defaultHeaders())
+	fmt.Println(query)
+	newHeaders := defaultHeaders()
+	newHeaders.Accept = "application/json"
+	resp, err := p.get(query, newHeaders)
 
 	if err != nil {
 		fmt.Printf("%s", err)
-		return Section{}, err
+		return Response{}, err
 	}
 
 	defer resp.Body.Close()
 
-	var result Section
+	var result Response
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		fmt.Println(err.Error())
-		return Section{}, err
+		return Response{}, err
 	}
 
 	return result, nil
@@ -743,28 +728,28 @@ func (p *Plex) GetSections(machineID string) ([]ServerSections, error) {
 
 // GetLibraries of your Plex server. My ideal use-case would be
 // to get library count to determine label index
-func (p *Plex) GetLibraries() (LibrarySections, error) {
+func (p *Plex) GetLibraries() (Response, error) {
 
 	query := fmt.Sprintf("%s/library/sections", p.URL)
 
 	resp, err := p.get(query, defaultHeaders())
 
 	if err != nil {
-		return LibrarySections{}, err
+		return Response{}, err
 	}
 
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return LibrarySections{}, errors.New(resp.Status)
+		return Response{}, errors.New(resp.Status)
 	}
 
-	var result LibrarySections
+	var result Response
 
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		fmt.Println(err.Error())
 
-		return LibrarySections{}, err
+		return Response{}, err
 	}
 
 	return result, nil

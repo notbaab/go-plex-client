@@ -10,7 +10,14 @@
 [[projects]]
   branch = "master"
   name = "github.com/dgraph-io/badger"
-  packages = [".","options","protos","skl","table","y"]
+  packages = [
+    ".",
+    "options",
+    "protos",
+    "skl",
+    "table",
+    "y"
+  ]
   revision = "d3634b7b071896c411f3111cf6cf291fa7543618"
 
 [[projects]]
@@ -26,10 +33,22 @@
   revision = "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9"
 
 [[projects]]
+  name = "github.com/gorilla/websocket"
+  packages = ["."]
+  revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
   revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  revision = "b4575eea38cca1123ec2dc90c26529b5c5acfcff"
 
 [[projects]]
   name = "github.com/pkg/errors"
@@ -46,7 +65,11 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["context","internal/timeseries","trace"]
+  packages = [
+    "context",
+    "internal/timeseries",
+    "trace"
+  ]
   revision = "7b572d500b0702f1ea30a47083ce2e1e5c61edba"
 
 [[projects]]
@@ -58,6 +81,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "a1b5dbeee83c194f2878036ff3b84adf9102a252e64e0458146b38d26bda0e22"
+  inputs-digest = "4f2de73eba72813e1650a38849cf1b6e2e9cfa3729f318df5ed4730c52f21b71"
   solver-name = "gps-cdcl"
   solver-version = 1

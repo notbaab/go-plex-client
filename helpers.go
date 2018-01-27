@@ -41,14 +41,14 @@ func GetMediaTypeID(mediaType string) string {
 }
 
 // GetMediaType is a helper function that returns the media type. Usually, used after GetMetadata().
-func GetMediaType(info MediaMetadata) string {
-	if dType := info.Directory.Type; dType != "" {
+func GetMediaType(info Metadata) string {
+	if dType := info.Type; dType != "" {
 		return dType
 	}
 
-	if vType := info.Video.Type; vType != "" {
-		return vType
-	}
+	// if vType := info.Video.Type; vType != "" {
+	// 	return vType
+	// }
 
 	return ""
 }
